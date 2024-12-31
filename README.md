@@ -1,9 +1,15 @@
-# Ollama Docker Compose Setup
+# Ollama Docker Compose Setup + stable-diffusion container 
 
-Welcome to the Ollama Docker Compose Setup! This project simplifies the deployment of Ollama using Docker Compose, making it easy to run Ollama with all its dependencies in a containerized environment.
+Welcome to the Ollama Docker Compose Setup + stable-diffusion container ! 
+This project simplifies the deployment of Ollama & stable-diffusion using Docker Compose, making it easy to run Ollama with all its dependencies in a containerized environment.
 [![Star History Chart](https://api.star-history.com/svg?repos=valiantlynx/ollama-docker&type=Date)](https://star-history.com/#valiantlynx/ollama-docker&Date)
 
+This is a forked veersion  from  [https://github.com/valiantlynx/ollama-docker] & using submodule of [https://github.com/ai-dock/stable-diffusion-webui] to have both in same docker compose environment.
+
 ## Getting Started
+
+Note : stable-diffusion needs the GPU version of the docker compose file. 
+cpu version is not supported for now.
 
 ### Prerequisites
 Make sure you have the following prerequisites installed on your machine:
@@ -47,21 +53,27 @@ docker run --gpus all nvidia/cuda:11.5.2-base-ubuntu20.04 nvidia-smi
 
 ## Usage
 
-Start Ollama and its dependencies using Docker Compose:
+Start Ollama and its dependencies and stable-diffusion containers using Docker Compose:
 
 if gpu is configured
 ```bash
 docker-compose -f docker-compose-ollama-gpu.yaml up -d
 ```
+or 
+```bash
+./start_docker_compose.sh <-d>
+```
 
-else
+else ( no gpu & no stable-diffusion ) 
 ```bash
 docker-compose up -d
 ```
 
 Visit [http://localhost:8000](http://localhost:8000) in your browser to access Ollama-webui.
+Visit [http://localhost:7860](http://localhost:7860) in your browser to access stable-diffusion-webui.
 
-### Model Installation
+
+### Model Installation (ollama pull)
 
 Navigate to settings -> model and install a model (e.g., llava-phi3). This may take a couple of minutes, but afterward, you can use it just like ChatGPT.
 
@@ -69,14 +81,37 @@ Navigate to settings -> model and install a model (e.g., llava-phi3). This may t
 
 You can explore Langchain and Ollama within the project. A third container named **app** has been created for this purpose. Inside, you'll find some examples.
 
+
+### link openweb ui with stable iffusion using Automatic1111
+after setting up Ollama modules and you webUI is working with your custom module, you can link the openWeb UI image generation by adding the url 
+[http://host.docker.internal:7860] in your settings -> admin settings -> images -> 
+ 1- set engine to Automatic1111 
+ 2- set url to  [http://host.docker.internal:7860]
+ 3- check the variable $WEBUI_ARGS in file docker-compose-ollama-gpu.yaml to add your own stable-diff webui options such as "--api --listen" 
+
 ### Devcontainer and Virtual Environment
 
 The **app** container serves as a devcontainer, allowing you to boot into it for experimentation. Additionally, the run.sh file contains code to set up a virtual environment if you prefer not to use Docker for your development environment.
 if you have vs code and the `Remote Development´ extension simply opening this project from the root will make vscode ask you to reopen in container
 ## Stop and Cleanup
 
-To stop the containers and remove the network:
+To stop the containers :
 
+```bash
+docker-compose -f docker-compose-ollama-gpu.yaml stop
+```
+or (cpu )
+```bash
+docker-compose  stop
+```
+
+
+To stop the containers and remove the network:
+(GPU)
+```bash
+docker-compose -f docker-compose-ollama-gpu.yaml down
+```
+or (cpu )
 ```bash
 docker-compose down
 ```
