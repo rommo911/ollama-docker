@@ -1,0 +1,42 @@
+services:
+  deepstack:
+    container_name: deepstack_container
+    restart: unless-stopped
+    image: deepquestai/deepstack:gpu
+    pull_policy: always 
+    ports:
+      - 4999:5000
+    environment:
+      - VISION-DETECTION=True
+      - VISION-FACE=True
+      - API-KEY="test"
+    volumes:
+      - ./pytorch-models/:/modelstore/detection
+      - ./localstorage:/datastore
+    networks:
+      - deepstack-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  deepstack_ui:
+    container_name: deepstack_ui
+    restart: unless-stopped
+    image: robmarkcole/deepstack-ui:latest
+    environment: 
+      - DEEPSTACK_IP=host.docker.internal
+      - DEEPSTACK_PORT=4999
+      - DEEPSTACK_API_KEY="test"
+      - DEEPSTACK_TIMEOUT=30
+      #- DEEPSTACK_CUSTOM_MODEL=fire
+      - DEEPSTACK_UI_DEBUG_MODE=True
+    ports:
+      - 8501:8501
+    networks:
+      - deepstack-network
+networks:
+  deepstack-network:
+    external: false
