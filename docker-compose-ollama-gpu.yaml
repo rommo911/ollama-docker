@@ -21,7 +21,7 @@ services:
     pull_policy: always
     tty: true
     restart: unless-stopped
-    image: ollama/ollama:latest
+    image: docker.io/ollama/ollama:latest
     ports:
       - 7869:11434
     environment:
