@@ -87,7 +87,7 @@ We welcome contributions! If you'd like to contribute to the Ollama Docker Compo
 
 ## License
 
-This project is licensed under the [RSOSL](LICENSE). Feel free to use, modify, and distribute it according to the terms of the license. Just give me a mention and some credit
+This project is licensed under the [RSOSL](https://github.com/mythrantic/ollama-docker/blob/main/LICENCE.md). Feel free to use, modify, and distribute it according to the terms of the license. Just give me a mention and some credit
 
 ## Contact
 
